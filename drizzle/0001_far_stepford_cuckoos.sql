@@ -1,0 +1,1 @@
+ALTER TABLE "platform"."routes" DROP COLUMN "target_path";

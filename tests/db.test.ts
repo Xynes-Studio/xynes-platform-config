@@ -26,7 +26,6 @@ describe('Route Registry', () => {
         method: 'GET',
         pathPattern: '/unique-test',
         serviceKey: 'test',
-        targetPath: '/test',
         actionKey: 'test.read',
         isPublic: false,
         workspaceScoped: false
