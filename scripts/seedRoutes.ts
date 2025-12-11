@@ -20,6 +20,40 @@ const main = async () => {
         actionKey: 'docs.document.read',
         workspaceScoped: true,
         isPublic: false
+      },
+      // Blog Routes
+      {
+        method: 'GET',
+        pathPattern: '/workspaces/:workspaceId/blog',
+        serviceKey: 'cms-core',
+        actionKey: 'cms.blog_entry.listPublished',
+        workspaceScoped: true,
+        isPublic: true
+      },
+      {
+        method: 'GET',
+        pathPattern: '/workspaces/:workspaceId/blog/:slug',
+        serviceKey: 'cms-core',
+        actionKey: 'cms.blog_entry.getPublishedBySlug',
+        workspaceScoped: true,
+        isPublic: true
+      },
+      // Comment Routes
+      {
+        method: 'POST',
+        pathPattern: '/workspaces/:workspaceId/content-entries/:entryId/comments',
+        serviceKey: 'cms-core',
+        actionKey: 'cms.comments.create',
+        workspaceScoped: true,
+        isPublic: true
+      },
+      {
+        method: 'GET',
+        pathPattern: '/workspaces/:workspaceId/content-entries/:entryId/comments',
+        serviceKey: 'cms-core',
+        actionKey: 'cms.comments.listForEntry',
+        workspaceScoped: true,
+        isPublic: true
       }
     ]).onConflictDoNothing();
     console.log('Routes seeded successfully');

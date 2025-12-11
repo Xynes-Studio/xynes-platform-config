@@ -17,6 +17,12 @@ This repository serves as the central source of truth for the platform's dynamic
 | `workspaceScoped` | `boolean` | Whether the route requires a workspace ID (default: `true`) |
 | `isPublic` | `boolean` | Whether the route is effectively public (default: `false`) |
 
+### Standard Routes
+- **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
+- **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
+- **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET)
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
