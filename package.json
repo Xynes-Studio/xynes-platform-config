@@ -10,7 +10,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "seed": "bun run src/scripts/seed.ts"
+    "migrate": "drizzle-kit migrate",
+    "seed": "bun run src/scripts/seed.ts",
+    "seed:routes": "bun run scripts/seedRoutes.ts"
   },
   "dependencies": {
     "hono": "^4.6.14",
