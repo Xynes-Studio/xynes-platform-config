@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 import { db } from '../src/db/index';
-import { routes } from '../src/db/schema';
+import { platformRoutes as routes } from '../src/db/platformRoutes';
 import { sql } from 'drizzle-orm';
 
 describe('Route Registry', () => {
@@ -38,7 +38,7 @@ describe('Route Registry', () => {
     try {
         await db.insert(routes).values(newRoute);
         expect(true).toBe(false); // Should not reach here
-    } catch (e: any) {
+    } catch (e: unknown) {
         // Postgres error code 23505 is unique_violation
         // Drizzle/Postgresjs might return it differently, but it should throw.
         expect(e).toBeDefined();
