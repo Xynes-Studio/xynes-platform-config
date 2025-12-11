@@ -1,4 +1,4 @@
-import { pgTable, text, boolean, timestamp, uuid, unique, pgSchema } from 'drizzle-orm/pg-core';
+import { text, boolean, timestamp, uuid, unique, pgSchema } from 'drizzle-orm/pg-core';
 import { type InferSelectModel } from 'drizzle-orm';
 
 export const platformSchema = pgSchema('platform');

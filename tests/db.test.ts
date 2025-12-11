@@ -19,6 +19,15 @@ describe('Route Registry', () => {
     expect(docCreate).toBeDefined();
     expect(docCreate?.method).toBe('POST');
     expect(docCreate?.pathPattern).toBe('/workspaces/:workspaceId/documents');
+
+    const blogList = allRoutes.find(r => r.actionKey === 'cms.blog_entry.listPublished');
+    expect(blogList).toBeDefined();
+    expect(blogList?.method).toBe('GET');
+    expect(blogList?.isPublic).toBe(true);
+
+    const commentCreate = allRoutes.find(r => r.actionKey === 'cms.comments.create');
+    expect(commentCreate).toBeDefined();
+    expect(commentCreate?.method).toBe('POST');
   });
 
   it('should enforce unique constraint on method + pathPattern', async () => {
