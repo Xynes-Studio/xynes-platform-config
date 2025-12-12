@@ -1,5 +1,5 @@
 import { db } from '../db/index';
-import { routes } from '../db/schema';
+import { platformRoutes as routes } from '../db/platformRoutes';
 
 const seedData = [
   // Documents
@@ -31,6 +31,23 @@ const seedData = [
     serviceKey: 'cms-core',
     actionKey: 'cms.blog_entry.read',
     workspaceScoped: true,
+  },
+  // Public Blog Routes
+  {
+    method: 'GET',
+    pathPattern: '/workspaces/:workspaceId/blog',
+    serviceKey: 'cms-core',
+    actionKey: 'cms.blog_entry.listPublished',
+    workspaceScoped: true,
+    isPublic: true,
+  },
+  {
+    method: 'GET',
+    pathPattern: '/workspaces/:workspaceId/blog/:slug',
+    serviceKey: 'cms-core',
+    actionKey: 'cms.blog_entry.getPublishedBySlug',
+    workspaceScoped: true,
+    isPublic: true,
   },
 ];
 
