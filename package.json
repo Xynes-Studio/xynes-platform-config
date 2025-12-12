@@ -13,7 +13,7 @@
     "migrate": "drizzle-kit migrate",
     "seed": "bun run src/scripts/seed.ts",
     "seed:routes": "bun run scripts/seedRoutes.ts",
-    "gen:docs": "bun run --env-file=.env.localhost scripts/generate-docs.ts"
+    "gen:docs": "sh -c 'bun --env-file=\"${XYNES_ENV_FILE:-.env.dev}\" run scripts/generate-docs.ts'"
   },
   "dependencies": {
     "hono": "^4.6.14",
