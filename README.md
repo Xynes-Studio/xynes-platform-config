@@ -83,7 +83,12 @@ xynes-platform-config/
    ```
    See `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md` for the recommended SSH host alias setup.
 
-2. Set `DATABASE_URL` to `127.0.0.1:5432` (pooler) and run:
+2. Update `DATABASE_URL` in your `.env` to a full Postgres connection string (pointing at the tunnel on `127.0.0.1:5432`), for example:
+   ```env
+   DATABASE_URL="postgres://postgres.<TENANT_ID>:<POSTGRES_PASSWORD>@127.0.0.1:5432/postgres"
+   ```
+
+3. Run the seed:
    ```bash
    bun run seed:routes
    ```
