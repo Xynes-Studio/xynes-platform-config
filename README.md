@@ -85,7 +85,8 @@ xynes-platform-config/
 
 2. Update `DATABASE_URL` in your `.env` to a full Postgres connection string (pointing at the tunnel on `127.0.0.1:5432`), for example:
    ```env
-   DATABASE_URL="postgres://postgres.<TENANT_ID>:<POSTGRES_PASSWORD>@127.0.0.1:5432/postgres"
+   # Format: postgres://user:pass@host:port/db
+   DATABASE_URL="postgres://postgres:<POSTGRES_PASSWORD>@127.0.0.1:5432/postgres"
    ```
 
 3. Run the seed:
