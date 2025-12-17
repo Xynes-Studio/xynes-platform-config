@@ -53,7 +53,7 @@ DATABASE_URL="postgres://user:pass@host:5432/db"
 
 ## 🧪 Testing
 
-We follow TDD with strict coverage requirements.
+We follow TDD with strict coverage requirements (80%+).
 
 ```bash
 bun test --coverage
@@ -68,7 +68,22 @@ xynes-platform-config/
 │   ├── db/               # Drizzle schema definitions
 │   │   ├── platformRoutes.ts
 │   │   └── index.ts      # Database connection and exports
+│   ├── seeds/            # Seed data (single source of truth)
+│   │   └── routes.ts
 │   └── index.ts          # Public API exports
 ├── scripts/              # Utility scripts (seeding)
 └── tests/                # Unit and Integration tests
 ```
+
+## 🔌 Seeding Routes (SSH tunnel)
+
+1. Start the DB tunnel:
+   ```bash
+   ssh -N -L 5432:127.0.0.1:5432 xynes-vps
+   ```
+   See `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md` for the recommended SSH host alias setup.
+
+2. Set `DATABASE_URL` to `127.0.0.1:5432` (pooler) and run:
+   ```bash
+   bun run seed:routes
+   ```

@@ -1,10 +1,17 @@
-import { describe, it, expect } from 'bun:test';
-import { db } from '../src/db/index';
+import { describe, it, expect, beforeAll } from 'bun:test';
 import { platformRoutes as routes } from '../src/db/platformRoutes';
 import { sql } from 'drizzle-orm';
 
-describe('Route Registry', () => {
-  // We assume migrations are run before tests
+const databaseUrl = process.env.DATABASE_URL;
+const describeDb = databaseUrl ? describe : describe.skip;
+
+describeDb('Route Registry (DB)', () => {
+  // We assume migrations/seeds are run before tests
+  let db: typeof import('../src/db/index').db;
+
+  beforeAll(async () => {
+    ({ db } = await import('../src/db/index'));
+  });
   
   it('should be able to query the database', async () => {
     const result = await db.execute(sql`SELECT 1`);
@@ -24,6 +31,22 @@ describe('Route Registry', () => {
     expect(blogList).toBeDefined();
     expect(blogList?.method).toBe('GET');
     expect(blogList?.isPublic).toBe(true);
+
+    const contentList = allRoutes.find(r => r.actionKey === 'cms.content.listPublished');
+    expect(contentList).toBeDefined();
+    expect(contentList?.method).toBe('GET');
+    expect(contentList?.isPublic).toBe(true);
+    expect(contentList?.pathPattern).toBe('/workspaces/:workspaceId/content/:routeSegment');
+
+    const contentGet = allRoutes.find(r => r.actionKey === 'cms.content.getPublishedBySlug');
+    expect(contentGet).toBeDefined();
+    expect(contentGet?.method).toBe('GET');
+    expect(contentGet?.isPublic).toBe(true);
+    expect(contentGet?.pathPattern).toBe('/workspaces/:workspaceId/content/:routeSegment/:slug');
+
+    // Guardrail: exactly two generic /content routes (no per-template additions)
+    const genericContentRoutes = allRoutes.filter((r) => /\/content(\/|$)/.test(r.pathPattern));
+    expect(genericContentRoutes).toHaveLength(2);
 
     const commentCreate = allRoutes.find(r => r.actionKey === 'cms.comments.create');
     expect(commentCreate).toBeDefined();
