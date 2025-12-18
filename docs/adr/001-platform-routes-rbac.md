@@ -98,5 +98,5 @@ Integration tests verify:
 
 ## References
 
-- [SECURITY_MODEL.md](file:///Users/archanray/xynes/xynes-infra/infra/SECURITY_MODEL.md)
-- [SEC-PLATFORM-ROUTES-1 Story]
+- `xynes-infra/infra/SECURITY_MODEL.md` — Security model documentation (see xynes-infra repository)
+- SEC-PLATFORM-ROUTES-1 Story
