@@ -42,11 +42,18 @@ bun install
 
 ### Environment Variables
 
-Create `.env.dev` (and optionally `.env.localhost`) in the repo root:
+Create `.env.dev` (and optionally `.env.localhost`) in the repo root.
+This service uses **RBAC** for security, requiring two connection strings:
 
 ```env
-DATABASE_URL="postgres://user:pass@host:5432/db"
+# Runtime Access (SELECT-only on platform.routes)
+DATABASE_URL="postgres://gateway_runtime:pass@host:5432/db"
+
+# Admin Access (Full CRUD - for migrations/seeds)
+DATABASE_URL_ADMIN="postgres://platform_admin:pass@host:5432/db"
 ```
+
+For local development (without custom roles), you can map both to the same `postgres` user.
 
 Run scripts with the chosen env file, for example:
 
@@ -58,7 +65,7 @@ bun --env-file=.env.dev run seed:routes
 ## 🛠️ Scripts
 
 - `bun run migrate`: Apply pending migrations to the database.
-- `bun run seed:routes`: Seed the database with initial/example routes.
+- `bun run seed:routes`: Seed the database with initial/example routes (requires `DATABASE_URL_ADMIN`).
 - `bun test`: Run test suite.
 - `bun run lint`: Lint the codebase.
 
@@ -78,7 +85,8 @@ xynes-platform-config/
 ├── src/
 │   ├── db/               # Drizzle schema definitions
 │   │   ├── platformRoutes.ts
-│   │   └── index.ts      # Database connection and exports
+│   │   ├── admin.ts      # Admin connection (privileged)
+│   │   └── index.ts      # Runtime connection (restricted)
 │   ├── seeds/            # Seed data (single source of truth)
 │   │   └── routes.ts
 │   └── index.ts          # Public API exports
@@ -94,11 +102,9 @@ xynes-platform-config/
    ```
    See `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md` for the recommended SSH host alias setup.
 
-2. Update `DATABASE_URL` in your `.env` to a full Postgres connection string (pointing at the tunnel on `127.0.0.1:5432`), for example:
-   ```env
-   # Format: postgres://user:pass@host:port/db
-   DATABASE_URL="postgres://postgres:<POSTGRES_PASSWORD>@127.0.0.1:5432/postgres"
-   ```
+2. Update `DATABASE_URL` and `DATABASE_URL_ADMIN` in your `.env`.
+   - `DATABASE_URL`: `postgres://gateway_runtime:...`
+   - `DATABASE_URL_ADMIN`: `postgres://platform_admin:...`
 
 3. Run the seed:
    ```bash
