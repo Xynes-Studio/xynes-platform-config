@@ -2,17 +2,26 @@ import { describe, it, expect, beforeAll } from 'bun:test';
 import { platformRoutes as routes } from '../src/db/platformRoutes';
 import { sql } from 'drizzle-orm';
 
-const databaseUrl = process.env.DATABASE_URL;
-const describeDb = databaseUrl ? describe : describe.skip;
+/**
+ * Database Integration Tests
+ * 
+ * Uses admin credentials (DATABASE_URL_ADMIN) because:
+ * 1. gateway_runtime user cannot connect via Supabase pooler (only postgres-prefixed users)
+ * 2. Tests require INSERT/DELETE operations for setup/cleanup
+ * 
+ * Prerequisites: migrations and seeds must be run before tests
+ */
+const adminUrl = process.env.DATABASE_URL_ADMIN || process.env.DATABASE_URL;
+const describeDb = adminUrl ? describe : describe.skip;
 
 describeDb('Route Registry (DB)', () => {
-  // We assume migrations/seeds are run before tests
-  let db: typeof import('../src/db/index').db;
+  // Use admin connection for integration tests
+  let db: typeof import('../src/db/admin').adminDb;
 
   beforeAll(async () => {
-    ({ db } = await import('../src/db/index'));
+    ({ adminDb: db } = await import('../src/db/admin'));
   });
-  
+
   it('should be able to query the database', async () => {
     const result = await db.execute(sql`SELECT 1`);
     expect(result).toBeDefined();
@@ -21,7 +30,7 @@ describeDb('Route Registry (DB)', () => {
   it('should have seeded routes', async () => {
     const allRoutes = await db.select().from(routes);
     expect(allRoutes.length).toBeGreaterThan(0);
-    
+
     const docCreate = allRoutes.find(r => r.actionKey === 'docs.document.create');
     expect(docCreate).toBeDefined();
     expect(docCreate?.method).toBe('POST');
@@ -61,12 +70,12 @@ describeDb('Route Registry (DB)', () => {
 
   it('should enforce unique constraint on method + pathPattern', async () => {
     const newRoute = {
-        method: 'GET',
-        pathPattern: '/unique-test',
-        serviceKey: 'test',
-        actionKey: 'test.read',
-        isPublic: false,
-        workspaceScoped: false
+      method: 'GET',
+      pathPattern: '/unique-test',
+      serviceKey: 'test',
+      actionKey: 'test.read',
+      isPublic: false,
+      workspaceScoped: false
     };
 
     // First insert
@@ -74,14 +83,14 @@ describeDb('Route Registry (DB)', () => {
 
     // Second insert should fail
     try {
-        await db.insert(routes).values(newRoute);
-        expect(true).toBe(false); // Should not reach here
+      await db.insert(routes).values(newRoute);
+      expect(true).toBe(false); // Should not reach here
     } catch (e: unknown) {
-        // Postgres error code 23505 is unique_violation
-        // Drizzle/Postgresjs might return it differently, but it should throw.
-        expect(e).toBeDefined();
+      // Postgres error code 23505 is unique_violation
+      // Drizzle/Postgresjs might return it differently, but it should throw.
+      expect(e).toBeDefined();
     }
-    
+
     // Cleanup
     await db.delete(routes).where(sql`path_pattern = '/unique-test'`);
   });
