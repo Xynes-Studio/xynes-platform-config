@@ -30,5 +30,26 @@ describe("Route Seeds", () => {
       ]),
     );
   });
-});
 
+  it("should not seed comment routes as public by default", () => {
+    const commentCreate = routeSeeds.find(
+      (r) => r.actionKey === "cms.comments.create",
+    );
+    expect(commentCreate).toEqual(
+      expect.objectContaining({
+        method: "POST",
+        isPublic: false,
+      }),
+    );
+
+    const commentList = routeSeeds.find(
+      (r) => r.actionKey === "cms.comments.listForEntry",
+    );
+    expect(commentList).toEqual(
+      expect.objectContaining({
+        method: "GET",
+        isPublic: false,
+      }),
+    );
+  });
+});

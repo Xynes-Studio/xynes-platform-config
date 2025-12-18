@@ -13,14 +13,18 @@ This repository serves as the central source of truth for the platform's dynamic
 ### Platform Routes (`platform.routes`)
 
 | Column | Type | Description |
-|ionKey` | `text` | Internal action identifier (e.g., `docs.document.create`) |
+|--------|------|-------------|
+| `method` | `text` | HTTP method (e.g. `GET`, `POST`) |
+| `pathPattern` | `text` | Route pattern (e.g. `/workspaces/:workspaceId/blog`) |
+| `serviceKey` | `text` | Target service identifier (e.g. `cms-core`) |
+| `actionKey` | `text` | Internal action identifier (e.g. `docs.document.create`) |
 | `workspaceScoped` | `boolean` | Whether the route requires a workspace ID (default: `true`) |
 | `isPublic` | `boolean` | Whether the route is effectively public (default: `false`) |
 
 ### Standard Routes
 - **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
-- **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET)
+- **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
 
 
 ## 🚀 Getting Started
@@ -38,10 +42,17 @@ bun install
 
 ### Environment Variables
 
-Create a `.env` file:
+Create `.env.dev` (and optionally `.env.localhost`) in the repo root:
 
 ```env
 DATABASE_URL="postgres://user:pass@host:5432/db"
+```
+
+Run scripts with the chosen env file, for example:
+
+```bash
+bun --env-file=.env.dev test
+bun --env-file=.env.dev run seed:routes
 ```
 
 ## 🛠️ Scripts
