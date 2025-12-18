@@ -66,7 +66,7 @@ export const routeSeeds: RouteSeed[] = [
     serviceKey: 'cms-core',
     actionKey: 'cms.comments.create',
     workspaceScoped: true,
-    isPublic: true,
+    isPublic: false,
   },
   {
     method: 'GET',
@@ -74,7 +74,6 @@ export const routeSeeds: RouteSeed[] = [
     serviceKey: 'cms-core',
     actionKey: 'cms.comments.listForEntry',
     workspaceScoped: true,
-    isPublic: true,
+    isPublic: false,
   },
 ];
-

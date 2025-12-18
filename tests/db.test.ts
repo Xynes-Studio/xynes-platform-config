@@ -51,6 +51,12 @@ describeDb('Route Registry (DB)', () => {
     const commentCreate = allRoutes.find(r => r.actionKey === 'cms.comments.create');
     expect(commentCreate).toBeDefined();
     expect(commentCreate?.method).toBe('POST');
+    expect(commentCreate?.isPublic).toBe(false);
+
+    const commentListForEntry = allRoutes.find(r => r.actionKey === 'cms.comments.listForEntry');
+    expect(commentListForEntry).toBeDefined();
+    expect(commentListForEntry?.method).toBe('GET');
+    expect(commentListForEntry?.isPublic).toBe(false);
   });
 
   it('should enforce unique constraint on method + pathPattern', async () => {
