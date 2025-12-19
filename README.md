@@ -1,14 +1,25 @@
 # Xynes Platform Config
 
-This repository serves as the central source of truth for the platform's dynamic routing configuration and shared database logic. It is a library and migration tool, not an HTTP service.
+Central source of truth for dynamic routing configuration and shared DB logic.
+This repo is a library + migration/seeding tool (not an HTTP service).
 
-## 🎯 Purpose
+## Global Standards
+- **Environment segregation**:
+   - `.env.localhost`: host-run tooling via SSH tunnel (`127.0.0.1:5432`)
+   - `.env.dev`: Docker dev (inside Compose) via `db.local:5432`
+- **Least privilege**:
+   - `DATABASE_URL` should use a runtime role (SELECT-only)
+   - `DATABASE_URL_ADMIN` should use an admin role (migrations/seeds)
+- **Testing**: TDD-first, maintain **≥ 80% coverage** (`bun test --coverage`)
 
-- **Route Registry**: Defines the `platform.routes` table which maps HTTP paths to internal service actions.
-- **Database Schema**: Manages the `platform` schema using Drizzle ORM.
-- **Migrations**: Handles database migrations for the platform configuration.
+SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md`.
 
-## 🗃️ Data Model
+## Purpose
+- **Route registry**: defines `platform.routes` mapping HTTP paths to internal actions
+- **DB schema/migrations**: manages the `platform` schema via Drizzle
+- **Seeding**: idempotent route seed helpers used by other services
+
+## Data Model
 
 ### Platform Routes (`platform.routes`)
 
@@ -27,23 +38,24 @@ This repository serves as the central source of truth for the platform's dynamic
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
 
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
+- Bun
+- Postgres reachable via SSH tunnel (local) or Docker Compose (dev)
 
-- [Bun](https://bun.sh)
-- Postgres Database (connection string required)
-
-### Installation
+### Install
 
 ```bash
 bun install
 ```
 
-### Environment Variables
+### Environment
 
-Create `.env.dev` (and optionally `.env.localhost`) in the repo root.
-This service uses **RBAC** for security, requiring two connection strings:
+This repo includes `.env.dev` and `.env.localhost` with placeholder values to ease onboarding.
+Do not commit real credentials.
+
+It uses **RBAC** for DB access, so you should provide two connection strings:
 
 ```env
 # Runtime Access (SELECT-only on platform.routes)
@@ -53,31 +65,28 @@ DATABASE_URL="postgres://gateway_runtime:pass@host:5432/db"
 DATABASE_URL_ADMIN="postgres://platform_admin:pass@host:5432/db"
 ```
 
-For local development (without custom roles), you can map both to the same `postgres` user.
+For local development (without custom roles), you can temporarily point both to the same `postgres` user.
 
-Run scripts with the chosen env file, for example:
+Run scripts with an explicit env file:
 
 ```bash
-bun --env-file=.env.dev test
-bun --env-file=.env.dev run seed:routes
+bun --env-file=.env.localhost test
+bun --env-file=.env.localhost run seed:routes
 ```
 
-## 🛠️ Scripts
+## Scripts
 
 - `bun run migrate`: Apply pending migrations to the database.
 - `bun run seed:routes`: Seed the database with initial/example routes (requires `DATABASE_URL_ADMIN`).
 - `bun test`: Run test suite.
 - `bun run lint`: Lint the codebase.
 
-## 🧪 Testing
+## Testing (TDD + Coverage)
 
-We follow TDD with strict coverage requirements (80%+).
+- Fast local loop: `bun test`
+- Coverage gate: `bun test --coverage` (target ≥ 80%)
 
-```bash
-bun test --coverage
-```
-
-## 🏗️ Folder Structure
+## Folder Structure
 
 ```
 xynes-platform-config/
@@ -87,14 +96,14 @@ xynes-platform-config/
 │   │   ├── platformRoutes.ts
 │   │   ├── admin.ts      # Admin connection (privileged)
 │   │   └── index.ts      # Runtime connection (restricted)
+│   ├── scripts/          # Repo-local scripts (DB seed entrypoint)
 │   ├── seeds/            # Seed data (single source of truth)
-│   │   └── routes.ts
 │   └── index.ts          # Public API exports
-├── scripts/              # Utility scripts (seeding)
-└── tests/                # Unit and Integration tests
+├── scripts/              # Utility scripts (docs/seeding)
+└── tests/                # Unit + DB-backed tests
 ```
 
-## 🔌 Seeding Routes (SSH tunnel)
+## Seeding Routes (SSH tunnel)
 
 1. Start the DB tunnel:
    ```bash
@@ -102,7 +111,7 @@ xynes-platform-config/
    ```
    See `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md` for the recommended SSH host alias setup.
 
-2. Update `DATABASE_URL` and `DATABASE_URL_ADMIN` in your `.env`.
+2. Update `DATABASE_URL` and `DATABASE_URL_ADMIN` in your env file.
    - `DATABASE_URL`: `postgres://gateway_runtime:...`
    - `DATABASE_URL_ADMIN`: `postgres://platform_admin:...`
 
