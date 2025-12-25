@@ -38,6 +38,11 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
 
+### Workspace Invites (INVITES-CORE-1)
+
+- Migration: `platform.workspace_invites` (see `drizzle/0004_workspace_invites.sql`)
+- Seeded invite routes live in `src/seeds/routes.ts` and are validated in `tests/seedRoutes.test.ts`
+
 
 ## Getting Started
 

@@ -34,6 +34,31 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: false,
     isPublic: false,
   },
+  // Workspace Invites (INVITES-CORE-1)
+  {
+    method: "POST",
+    pathPattern: "/workspaces/:workspaceId/invites",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.invites.create",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
+    method: "GET",
+    pathPattern: "/workspace-invites/:token",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.invites.resolve",
+    workspaceScoped: false,
+    isPublic: true,
+  },
+  {
+    method: "POST",
+    pathPattern: "/workspace-invites/:token/accept",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.invites.accept",
+    workspaceScoped: false,
+    isPublic: false,
+  },
   {
     method: "POST",
     pathPattern: "/workspaces/:workspaceId/documents",

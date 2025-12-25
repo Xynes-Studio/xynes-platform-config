@@ -92,4 +92,46 @@ describe("Route Seeds", () => {
       })
     );
   });
+
+  it("should seed invite routes with correct public/auth + workspace scoping", () => {
+    const createInvite = routeSeeds.find(
+      (r) =>
+        r.pathPattern === "/workspaces/:workspaceId/invites" &&
+        r.method === "POST"
+    );
+    expect(createInvite).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.invites.create",
+        workspaceScoped: true,
+        isPublic: false,
+      })
+    );
+
+    const resolveInvite = routeSeeds.find(
+      (r) => r.pathPattern === "/workspace-invites/:token" && r.method === "GET"
+    );
+    expect(resolveInvite).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.invites.resolve",
+        workspaceScoped: false,
+        isPublic: true,
+      })
+    );
+
+    const acceptInvite = routeSeeds.find(
+      (r) =>
+        r.pathPattern === "/workspace-invites/:token/accept" &&
+        r.method === "POST"
+    );
+    expect(acceptInvite).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.invites.accept",
+        workspaceScoped: false,
+        isPublic: false,
+      })
+    );
+  });
 });
