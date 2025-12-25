@@ -66,4 +66,30 @@ describe("Route Seeds", () => {
       })
     );
   });
+
+  it("should seed global workspaces routes as auth-required and not workspace-scoped", () => {
+    const listRoute = routeSeeds.find(
+      (r) => r.pathPattern === "/workspaces" && r.method === "GET"
+    );
+    expect(listRoute).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.workspaces.listForUser",
+        workspaceScoped: false,
+        isPublic: false,
+      })
+    );
+
+    const createRoute = routeSeeds.find(
+      (r) => r.pathPattern === "/workspaces" && r.method === "POST"
+    );
+    expect(createRoute).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.workspaces.create",
+        workspaceScoped: false,
+        isPublic: false,
+      })
+    );
+  });
 });
