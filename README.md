@@ -5,7 +5,7 @@ This repo is a library + migration/seeding tool (not an HTTP service).
 
 ## Global Standards
 - **Environment segregation**:
-   - `.env.localhost`: host-run tooling via SSH tunnel (`127.0.0.1:5432`)
+   - `.env.localhsot`: host-run tooling via SSH tunnel (`127.0.0.1:5432`)
    - `.env.dev`: Docker dev (inside Compose) via `db.local:5432`
 - **Least privilege**:
    - `DATABASE_URL` should use a runtime role (SELECT-only)
@@ -33,6 +33,7 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 | `isPublic` | `boolean` | Whether the route is effectively public (default: `false`) |
 
 ### Standard Routes
+- **Me**: `/me` (GET) — auth required, not workspace-scoped
 - **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
@@ -70,8 +71,8 @@ For local development (without custom roles), you can temporarily point both to 
 Run scripts with an explicit env file:
 
 ```bash
-bun --env-file=.env.localhost test
-bun --env-file=.env.localhost run seed:routes
+bun --env-file=.env.localhsot test
+bun --env-file=.env.localhsot run seed:routes
 ```
 
 ## Scripts
@@ -107,7 +108,7 @@ xynes-platform-config/
 
 1. Start the DB tunnel:
    ```bash
-   ssh -N -L 5432:127.0.0.1:5432 xynes-vps
+   ssh -N -L 5432:127.0.0.1:5432 xynes@84.247.176.134
    ```
    See `xynes-infra/infra/SSH_TUNNEL_SUPABASE_DB.md` for the recommended SSH host alias setup.
 

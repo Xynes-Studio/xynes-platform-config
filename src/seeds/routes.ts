@@ -8,6 +8,15 @@ export interface RouteSeed {
 }
 
 export const routeSeeds: RouteSeed[] = [
+  // Accounts (ACCOUNTS-ME-1)
+  {
+    method: 'GET',
+    pathPattern: '/me',
+    serviceKey: 'accounts-service',
+    actionKey: 'accounts.me.getOrCreate',
+    workspaceScoped: false,
+    isPublic: false,
+  },
   {
     method: 'POST',
     pathPattern: '/workspaces/:workspaceId/documents',

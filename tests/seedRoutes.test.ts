@@ -52,4 +52,16 @@ describe("Route Seeds", () => {
       }),
     );
   });
+
+  it('should seed GET /me as auth-required and not workspace-scoped', () => {
+    const meRoute = routeSeeds.find((r) => r.pathPattern === '/me' && r.method === 'GET');
+    expect(meRoute).toEqual(
+      expect.objectContaining({
+        serviceKey: 'accounts-service',
+        actionKey: 'accounts.me.getOrCreate',
+        workspaceScoped: false,
+        isPublic: false,
+      }),
+    );
+  });
 });
