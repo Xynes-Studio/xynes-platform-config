@@ -17,6 +17,23 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: false,
     isPublic: false,
   },
+  // Workspaces (WORKSPACES-CORE-1)
+  {
+    method: "GET",
+    pathPattern: "/workspaces",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.workspaces.listForUser",
+    workspaceScoped: false,
+    isPublic: false,
+  },
+  {
+    method: "POST",
+    pathPattern: "/workspaces",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.workspaces.create",
+    workspaceScoped: false,
+    isPublic: false,
+  },
   {
     method: "POST",
     pathPattern: "/workspaces/:workspaceId/documents",
