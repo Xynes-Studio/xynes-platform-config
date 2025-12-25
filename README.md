@@ -5,7 +5,7 @@ This repo is a library + migration/seeding tool (not an HTTP service).
 
 ## Global Standards
 - **Environment segregation**:
-   - `.env.localhsot`: host-run tooling via SSH tunnel (`127.0.0.1:5432`)
+   - `.env.localhost`: host-run tooling via SSH tunnel (`127.0.0.1:5432`)
    - `.env.dev`: Docker dev (inside Compose) via `db.local:5432`
 - **Least privilege**:
    - `DATABASE_URL` should use a runtime role (SELECT-only)
@@ -71,8 +71,8 @@ For local development (without custom roles), you can temporarily point both to 
 Run scripts with an explicit env file:
 
 ```bash
-bun --env-file=.env.localhsot test
-bun --env-file=.env.localhsot run seed:routes
+bun --env-file=.env.localhost test
+bun --env-file=.env.localhost run seed:routes
 ```
 
 ## Scripts
