@@ -1,7 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-  schema: './src/db/platformRoutes.ts',
+  schema: ['./src/db/platformRoutes.ts', './src/db/routeRateLimits.ts'],
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {

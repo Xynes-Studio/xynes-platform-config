@@ -5,8 +5,9 @@ import {
   uuid,
   numeric,
   integer,
+  check,
 } from "drizzle-orm/pg-core";
-import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
+import { type InferSelectModel, type InferInsertModel, sql } from "drizzle-orm";
 import { platformRoutes, platformSchema } from "./platformRoutes";
 
 /**
@@ -35,20 +36,32 @@ export type BucketType = (typeof BUCKET_TYPES)[number];
  * - burst_factor must be >= 1.0
  * - enabled flag allows disabling rate limits without deletion
  */
-export const routeRateLimits = platformSchema.table("route_rate_limits", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  routeId: uuid("route_id")
-    .notNull()
-    .references(() => platformRoutes.id, { onDelete: "cascade" })
-    .unique(),
-  bucketType: text("bucket_type").notNull().$type<BucketType>(),
-  limitCount: integer("limit_count").notNull(),
-  windowSec: integer("window_sec").notNull(),
-  burstFactor: numeric("burst_factor").notNull().default("1.0"),
-  enabled: boolean("enabled").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-});
+export const routeRateLimits = platformSchema.table(
+  "route_rate_limits",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    routeId: uuid("route_id")
+      .notNull()
+      .references(() => platformRoutes.id, { onDelete: "cascade" })
+      .unique(),
+    bucketType: text("bucket_type").notNull().$type<BucketType>(),
+    limitCount: integer("limit_count").notNull(),
+    windowSec: integer("window_sec").notNull(),
+    burstFactor: numeric("burst_factor").notNull().default("1.0"),
+    enabled: boolean("enabled").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => [
+    check(
+      "bucket_type_check",
+      sql`${table.bucketType} IN ('ip', 'workspace', 'user', 'ip+workspace', 'ip+user')`
+    ),
+    check("limit_count_positive", sql`${table.limitCount} > 0`),
+    check("window_sec_positive", sql`${table.windowSec} > 0`),
+    check("burst_factor_min", sql`${table.burstFactor}::numeric >= 1.0`),
+  ]
+);
 
 export type RouteRateLimit = InferSelectModel<typeof routeRateLimits>;
 export type NewRouteRateLimit = InferInsertModel<typeof routeRateLimits>;
