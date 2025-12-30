@@ -110,21 +110,24 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: true,
     isPublic: true,
   },
-  // Comment Routes
+  // Comment Routes (CMS-COMMENTS-PUBLIC-1)
+  // Public comment creation - handler enforces content length limits for anonymous users
+  // and sets default status to "pending" for moderation
   {
     method: "POST",
     pathPattern: "/workspaces/:workspaceId/content-entries/:entryId/comments",
     serviceKey: "cms-core",
     actionKey: "cms.comments.create",
     workspaceScoped: true,
-    isPublic: false,
+    isPublic: true,
   },
+  // Public comment listing - unauthenticated users only see approved comments
   {
     method: "GET",
     pathPattern: "/workspaces/:workspaceId/content-entries/:entryId/comments",
     serviceKey: "cms-core",
     actionKey: "cms.comments.listForEntry",
     workspaceScoped: true,
-    isPublic: false,
+    isPublic: true,
   },
 ];
