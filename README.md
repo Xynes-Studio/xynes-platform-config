@@ -36,7 +36,27 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 - **Me**: `/me` (GET) — auth required, not workspace-scoped
 - **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
+- **Generic Content (GATEWAY-CONTENT-ROUTES-1)**: `/workspaces/:workspaceId/content/:routeSegment` (GET) — public, workspace-scoped, template-driven routes
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
+
+### Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)
+
+Template-driven routes that allow dynamic content type resolution without requiring gateway code changes:
+
+| Route | Action Key | Description |
+|-------|------------|-------------|
+| `GET /workspaces/:workspaceId/content/:routeSegment` | `cms.content.listPublished` | List published content by type |
+| `GET /workspaces/:workspaceId/content/:routeSegment/:slug` | `cms.content.getPublishedBySlug` | Get published content by slug |
+
+**Key properties:**
+- `isPublic: true` — No auth/authz required (only published entries returned)
+- `workspaceScoped: true` — Workspace context enforced via path param
+- `serviceKey: "cms-core"` — Routes to CMS service
+
+**How it works:**
+- `:routeSegment` is a dynamic path parameter (e.g., `blog`, `news`, `events`)
+- CMS service resolves `routeSegment` to a `contentTypeId` per workspace
+- Adding new content types requires only CMS setup, no gateway/platform-config changes
 
 ### Workspace Invites (INVITES-CORE-1)
 

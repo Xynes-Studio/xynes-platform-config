@@ -70,35 +70,35 @@ describe("Route Seeds", () => {
       expect(listRoute?.pathPattern).toContain(":routeSegment");
       expect(getRoute?.pathPattern).toContain(":routeSegment");
     });
-  });
 
-  it("should include exactly the two generic content routes", () => {
-    const genericContentRoutes = routeSeeds.filter((r) =>
-      /\/content(\/|$)/.test(r.pathPattern)
-    );
+    it("should include exactly two generic content routes (list + getBySlug)", () => {
+      const genericContentRoutes = routeSeeds.filter((r) =>
+        /\/content(\/|$)/.test(r.pathPattern)
+      );
 
-    expect(genericContentRoutes).toHaveLength(2);
+      expect(genericContentRoutes).toHaveLength(2);
 
-    expect(genericContentRoutes).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          method: "GET",
-          pathPattern: "/workspaces/:workspaceId/content/:routeSegment",
-          serviceKey: "cms-core",
-          actionKey: "cms.content.listPublished",
-          workspaceScoped: true,
-          isPublic: true,
-        }),
-        expect.objectContaining({
-          method: "GET",
-          pathPattern: "/workspaces/:workspaceId/content/:routeSegment/:slug",
-          serviceKey: "cms-core",
-          actionKey: "cms.content.getPublishedBySlug",
-          workspaceScoped: true,
-          isPublic: true,
-        }),
-      ])
-    );
+      expect(genericContentRoutes).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            method: "GET",
+            pathPattern: "/workspaces/:workspaceId/content/:routeSegment",
+            serviceKey: "cms-core",
+            actionKey: "cms.content.listPublished",
+            workspaceScoped: true,
+            isPublic: true,
+          }),
+          expect.objectContaining({
+            method: "GET",
+            pathPattern: "/workspaces/:workspaceId/content/:routeSegment/:slug",
+            serviceKey: "cms-core",
+            actionKey: "cms.content.getPublishedBySlug",
+            workspaceScoped: true,
+            isPublic: true,
+          }),
+        ])
+      );
+    });
   });
 
   it("should not seed comment routes as public by default", () => {
