@@ -2,15 +2,17 @@ import { describe, it, expect } from "bun:test";
 import { routeSeeds } from "../src/seeds/routes";
 
 describe("Route Seeds", () => {
-  it("should include exactly the two generic content routes", () => {
-    const genericContentRoutes = routeSeeds.filter((r) =>
-      /\/content(\/|$)/.test(r.pathPattern)
-    );
+  // GATEWAY-CONTENT-ROUTES-1: Generic Dynamic Public Content Routes
+  describe("Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)", () => {
+    it("should expose GET /workspaces/:workspaceId/content/:routeSegment as public, workspace-scoped", () => {
+      const listRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content/:routeSegment" &&
+          r.method === "GET"
+      );
 
-    expect(genericContentRoutes).toHaveLength(2);
-
-    expect(genericContentRoutes).toEqual(
-      expect.arrayContaining([
+      expect(listRoute).toBeDefined();
+      expect(listRoute).toEqual(
         expect.objectContaining({
           method: "GET",
           pathPattern: "/workspaces/:workspaceId/content/:routeSegment",
@@ -18,7 +20,20 @@ describe("Route Seeds", () => {
           actionKey: "cms.content.listPublished",
           workspaceScoped: true,
           isPublic: true,
-        }),
+        })
+      );
+    });
+
+    it("should expose GET /workspaces/:workspaceId/content/:routeSegment/:slug as public, workspace-scoped", () => {
+      const getBySlugRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern ===
+            "/workspaces/:workspaceId/content/:routeSegment/:slug" &&
+          r.method === "GET"
+      );
+
+      expect(getBySlugRoute).toBeDefined();
+      expect(getBySlugRoute).toEqual(
         expect.objectContaining({
           method: "GET",
           pathPattern: "/workspaces/:workspaceId/content/:routeSegment/:slug",
@@ -26,9 +41,64 @@ describe("Route Seeds", () => {
           actionKey: "cms.content.getPublishedBySlug",
           workspaceScoped: true,
           isPublic: true,
-        }),
-      ])
-    );
+        })
+      );
+    });
+
+    it("should route generic content requests to cms-core service", () => {
+      const contentRoutes = routeSeeds.filter((r) =>
+        r.pathPattern.includes("/content/:routeSegment")
+      );
+
+      expect(contentRoutes.length).toBeGreaterThanOrEqual(2);
+      contentRoutes.forEach((route) => {
+        expect(route.serviceKey).toBe("cms-core");
+      });
+    });
+
+    it("should use :routeSegment as dynamic path param for content type resolution", () => {
+      // Acceptance criteria: Adding a new type (e.g. news) requires only
+      // CMS content type setup + mapping routeSegment → contentType, not any gateway code change.
+      const listRoute = routeSeeds.find(
+        (r) => r.actionKey === "cms.content.listPublished"
+      );
+      const getRoute = routeSeeds.find(
+        (r) => r.actionKey === "cms.content.getPublishedBySlug"
+      );
+
+      // Both routes should use :routeSegment (typeKey equivalent) for dynamic content type mapping
+      expect(listRoute?.pathPattern).toContain(":routeSegment");
+      expect(getRoute?.pathPattern).toContain(":routeSegment");
+    });
+
+    it("should include exactly two generic content routes (list + getBySlug)", () => {
+      const genericContentRoutes = routeSeeds.filter((r) =>
+        /\/content(\/|$)/.test(r.pathPattern)
+      );
+
+      expect(genericContentRoutes).toHaveLength(2);
+
+      expect(genericContentRoutes).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            method: "GET",
+            pathPattern: "/workspaces/:workspaceId/content/:routeSegment",
+            serviceKey: "cms-core",
+            actionKey: "cms.content.listPublished",
+            workspaceScoped: true,
+            isPublic: true,
+          }),
+          expect.objectContaining({
+            method: "GET",
+            pathPattern: "/workspaces/:workspaceId/content/:routeSegment/:slug",
+            serviceKey: "cms-core",
+            actionKey: "cms.content.getPublishedBySlug",
+            workspaceScoped: true,
+            isPublic: true,
+          }),
+        ])
+      );
+    });
   });
 
   it("should not seed comment routes as public by default", () => {
