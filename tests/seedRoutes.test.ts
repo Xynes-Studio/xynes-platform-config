@@ -101,26 +101,53 @@ describe("Route Seeds", () => {
     });
   });
 
-  it("should not seed comment routes as public by default", () => {
-    const commentCreate = routeSeeds.find(
-      (r) => r.actionKey === "cms.comments.create"
-    );
-    expect(commentCreate).toEqual(
-      expect.objectContaining({
-        method: "POST",
-        isPublic: false,
-      })
-    );
+  // CMS-COMMENTS-PUBLIC-1: Public Comment Routes
+  describe("Public Comment Routes (CMS-COMMENTS-PUBLIC-1)", () => {
+    it("should expose POST /workspaces/:workspaceId/content-entries/:entryId/comments as public for anonymous comment creation", () => {
+      const commentCreate = routeSeeds.find(
+        (r) => r.actionKey === "cms.comments.create"
+      );
+      expect(commentCreate).toEqual(
+        expect.objectContaining({
+          method: "POST",
+          pathPattern:
+            "/workspaces/:workspaceId/content-entries/:entryId/comments",
+          serviceKey: "cms-core",
+          actionKey: "cms.comments.create",
+          workspaceScoped: true,
+          isPublic: true,
+        })
+      );
+    });
 
-    const commentList = routeSeeds.find(
-      (r) => r.actionKey === "cms.comments.listForEntry"
-    );
-    expect(commentList).toEqual(
-      expect.objectContaining({
-        method: "GET",
-        isPublic: false,
-      })
-    );
+    it("should expose GET /workspaces/:workspaceId/content-entries/:entryId/comments as public for listing comments", () => {
+      const commentList = routeSeeds.find(
+        (r) => r.actionKey === "cms.comments.listForEntry"
+      );
+      expect(commentList).toEqual(
+        expect.objectContaining({
+          method: "GET",
+          pathPattern:
+            "/workspaces/:workspaceId/content-entries/:entryId/comments",
+          serviceKey: "cms-core",
+          actionKey: "cms.comments.listForEntry",
+          workspaceScoped: true,
+          isPublic: true,
+        })
+      );
+    });
+
+    it("should route comment requests to cms-core service with workspace scoping", () => {
+      const commentRoutes = routeSeeds.filter((r) =>
+        r.pathPattern.includes("/content-entries/:entryId/comments")
+      );
+
+      expect(commentRoutes).toHaveLength(2);
+      commentRoutes.forEach((route) => {
+        expect(route.serviceKey).toBe("cms-core");
+        expect(route.workspaceScoped).toBe(true);
+      });
+    });
   });
 
   it("should seed GET /me as auth-required and not workspace-scoped", () => {
