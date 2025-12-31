@@ -132,7 +132,7 @@ export const routeSeeds: RouteSeed[] = [
   },
   // ─────────────────────────────────────────────────────────────────────────────
   // Telemetry Routes (TELE-VIEW-1)
-  // Admin/Owner only - requires telemetry.view permission
+  // Admin/Owner only - requires telemetry.events.view permission
   // ─────────────────────────────────────────────────────────────────────────────
   {
     method: "GET",
