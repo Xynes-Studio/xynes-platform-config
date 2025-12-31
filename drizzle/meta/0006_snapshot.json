@@ -1,0 +1,214 @@
+{
+  "id": "bb3b3cc4-bcd1-4917-b8b5-b1a34663fc63",
+  "prevId": "8b3cb0fb-2579-4fab-a3f5-04c6cb7841f8",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "platform.routes": {
+      "name": "routes",
+      "schema": "platform",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path_pattern": {
+          "name": "path_pattern",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_key": {
+          "name": "service_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action_key": {
+          "name": "action_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "workspace_scoped": {
+          "name": "workspace_scoped",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "platform_routes_method_path_pattern_unique": {
+          "name": "platform_routes_method_path_pattern_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "method",
+            "path_pattern"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "platform.route_rate_limits": {
+      "name": "route_rate_limits",
+      "schema": "platform",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "route_id": {
+          "name": "route_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bucket_type": {
+          "name": "bucket_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "limit_count": {
+          "name": "limit_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "window_sec": {
+          "name": "window_sec",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "burst_factor": {
+          "name": "burst_factor",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'1.0'"
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "route_rate_limits_route_id_routes_id_fk": {
+          "name": "route_rate_limits_route_id_routes_id_fk",
+          "tableFrom": "route_rate_limits",
+          "tableTo": "routes",
+          "schemaTo": "platform",
+          "columnsFrom": [
+            "route_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "route_rate_limits_route_id_unique": {
+          "name": "route_rate_limits_route_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "route_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "bucket_type_check": {
+          "name": "bucket_type_check",
+          "value": "\"platform\".\"route_rate_limits\".\"bucket_type\" IN ('ip', 'workspace', 'user', 'ip+workspace', 'ip+user')"
+        },
+        "limit_count_positive": {
+          "name": "limit_count_positive",
+          "value": "\"platform\".\"route_rate_limits\".\"limit_count\" > 0"
+        },
+        "window_sec_positive": {
+          "name": "window_sec_positive",
+          "value": "\"platform\".\"route_rate_limits\".\"window_sec\" > 0"
+        },
+        "burst_factor_min": {
+          "name": "burst_factor_min",
+          "value": "\"platform\".\"route_rate_limits\".\"burst_factor\"::numeric >= 1.0"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "platform": "platform"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

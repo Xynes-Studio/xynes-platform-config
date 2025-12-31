@@ -1,5 +1,5 @@
 import { db } from '../db/index';
-import { routes } from '../db/schema';
+import { platformRoutes as routes } from '../db/platformRoutes';
 
 const seedData = [
   // Documents
@@ -7,7 +7,6 @@ const seedData = [
     method: 'POST',
     pathPattern: '/workspaces/:workspaceId/documents',
     serviceKey: 'doc-service',
-    targetPath: '/documents',
     actionKey: 'docs.document.create',
     workspaceScoped: true,
   },
@@ -15,7 +14,6 @@ const seedData = [
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/documents/:id',
     serviceKey: 'doc-service',
-    targetPath: '/documents/:id',
     actionKey: 'docs.document.read',
     workspaceScoped: true,
   },
@@ -24,7 +22,6 @@ const seedData = [
     method: 'POST',
     pathPattern: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     serviceKey: 'cms-core',
-    targetPath: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     actionKey: 'cms.blog_entry.create',
     workspaceScoped: true, // Assuming this, as it has workspaceId in path
   },
@@ -32,9 +29,25 @@ const seedData = [
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     serviceKey: 'cms-core',
-    targetPath: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     actionKey: 'cms.blog_entry.read',
     workspaceScoped: true,
+  },
+  // Public Blog Routes
+  {
+    method: 'GET',
+    pathPattern: '/workspaces/:workspaceId/blog',
+    serviceKey: 'cms-core',
+    actionKey: 'cms.blog_entry.listPublished',
+    workspaceScoped: true,
+    isPublic: true,
+  },
+  {
+    method: 'GET',
+    pathPattern: '/workspaces/:workspaceId/blog/:slug',
+    serviceKey: 'cms-core',
+    actionKey: 'cms.blog_entry.getPublishedBySlug',
+    workspaceScoped: true,
+    isPublic: true,
   },
 ];
 

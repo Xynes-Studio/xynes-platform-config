@@ -10,7 +10,10 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "seed": "bun run src/scripts/seed.ts"
+    "migrate": "drizzle-kit migrate",
+    "seed": "bun run src/scripts/seed.ts",
+    "seed:routes": "bun run scripts/seedRoutes.ts",
+    "gen:docs": "sh -c 'bun --env-file=\"${XYNES_ENV_FILE:-.env.dev}\" run scripts/generate-docs.ts'"
   },
   "dependencies": {
     "hono": "^4.6.14",

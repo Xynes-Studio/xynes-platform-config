@@ -1,8 +1,10 @@
 # Dependencies
 node_modules/
+.bun
 
 # Environment files
 .env
+.env.dev
 .env.local
 .env.localhost
 .env.*.local
