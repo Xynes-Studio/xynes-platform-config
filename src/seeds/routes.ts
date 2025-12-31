@@ -130,4 +130,24 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: true,
     isPublic: true,
   },
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Telemetry Routes (TELE-VIEW-1)
+  // Admin/Owner only - requires telemetry.events.view permission
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/telemetry/events",
+    serviceKey: "telemetry-service",
+    actionKey: "telemetry.events.listRecentForWorkspace",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/telemetry/stats/routes",
+    serviceKey: "telemetry-service",
+    actionKey: "telemetry.stats.summaryByRoute",
+    workspaceScoped: true,
+    isPublic: false,
+  },
 ];

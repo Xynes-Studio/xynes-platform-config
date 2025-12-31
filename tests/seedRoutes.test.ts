@@ -231,4 +231,57 @@ describe("Route Seeds", () => {
       })
     );
   });
+
+  // TELE-VIEW-1: Telemetry Query Routes
+  describe("Telemetry Routes (TELE-VIEW-1)", () => {
+    it("should seed GET /workspaces/:workspaceId/telemetry/events as auth-required and workspace-scoped", () => {
+      const eventsRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/telemetry/events" &&
+          r.method === "GET"
+      );
+      expect(eventsRoute).toBeDefined();
+      expect(eventsRoute).toEqual(
+        expect.objectContaining({
+          method: "GET",
+          pathPattern: "/workspaces/:workspaceId/telemetry/events",
+          serviceKey: "telemetry-service",
+          actionKey: "telemetry.events.listRecentForWorkspace",
+          workspaceScoped: true,
+          isPublic: false,
+        })
+      );
+    });
+
+    it("should seed GET /workspaces/:workspaceId/telemetry/stats/routes as auth-required and workspace-scoped", () => {
+      const statsRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/telemetry/stats/routes" &&
+          r.method === "GET"
+      );
+      expect(statsRoute).toBeDefined();
+      expect(statsRoute).toEqual(
+        expect.objectContaining({
+          method: "GET",
+          pathPattern: "/workspaces/:workspaceId/telemetry/stats/routes",
+          serviceKey: "telemetry-service",
+          actionKey: "telemetry.stats.summaryByRoute",
+          workspaceScoped: true,
+          isPublic: false,
+        })
+      );
+    });
+
+    it("should route telemetry requests to telemetry-service", () => {
+      const telemetryRoutes = routeSeeds.filter((r) =>
+        r.pathPattern.includes("/telemetry/")
+      );
+      expect(telemetryRoutes.length).toBeGreaterThanOrEqual(2);
+      telemetryRoutes.forEach((route) => {
+        expect(route.serviceKey).toBe("telemetry-service");
+        expect(route.workspaceScoped).toBe(true);
+        expect(route.isPublic).toBe(false);
+      });
+    });
+  });
 });
