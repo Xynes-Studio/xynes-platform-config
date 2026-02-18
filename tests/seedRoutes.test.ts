@@ -164,6 +164,20 @@ describe("Route Seeds", () => {
     );
   });
 
+  it("should seed PATCH /me/profile as auth-required and not workspace-scoped", () => {
+    const profileRoute = routeSeeds.find(
+      (r) => r.pathPattern === "/me/profile" && r.method === "PATCH"
+    );
+    expect(profileRoute).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.user.updateSelf",
+        workspaceScoped: false,
+        isPublic: false,
+      })
+    );
+  });
+
   it("should seed global workspaces routes as auth-required and not workspace-scoped", () => {
     const listRoute = routeSeeds.find(
       (r) => r.pathPattern === "/workspaces" && r.method === "GET"
@@ -185,6 +199,22 @@ describe("Route Seeds", () => {
         serviceKey: "accounts-service",
         actionKey: "accounts.workspaces.create",
         workspaceScoped: false,
+        isPublic: false,
+      })
+    );
+  });
+
+  it("should seed workspace members route as auth-required and workspace-scoped", () => {
+    const membersRoute = routeSeeds.find(
+      (r) =>
+        r.pathPattern === "/workspaces/:workspaceId/members" &&
+        r.method === "GET"
+    );
+    expect(membersRoute).toEqual(
+      expect.objectContaining({
+        serviceKey: "accounts-service",
+        actionKey: "accounts.workspace_members.listForWorkspace",
+        workspaceScoped: true,
         isPublic: false,
       })
     );

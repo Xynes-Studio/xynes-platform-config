@@ -1,6 +1,7 @@
 export interface RouteSeed {
   method: string;
   pathPattern: string;
+  targetPath?: string;
   serviceKey: string;
   actionKey: string;
   workspaceScoped: boolean;
@@ -14,6 +15,14 @@ export const routeSeeds: RouteSeed[] = [
     pathPattern: "/me",
     serviceKey: "accounts-service",
     actionKey: "accounts.me.getOrCreate",
+    workspaceScoped: false,
+    isPublic: false,
+  },
+  {
+    method: "PATCH",
+    pathPattern: "/me/profile",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.user.updateSelf",
     workspaceScoped: false,
     isPublic: false,
   },
@@ -32,6 +41,14 @@ export const routeSeeds: RouteSeed[] = [
     serviceKey: "accounts-service",
     actionKey: "accounts.workspaces.create",
     workspaceScoped: false,
+    isPublic: false,
+  },
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/members",
+    serviceKey: "accounts-service",
+    actionKey: "accounts.workspace_members.listForWorkspace",
+    workspaceScoped: true,
     isPublic: false,
   },
   // Workspace Invites (INVITES-CORE-1)

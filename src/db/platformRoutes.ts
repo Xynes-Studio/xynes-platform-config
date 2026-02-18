@@ -25,6 +25,7 @@ export const platformRoutes = platformSchema.table(
     id: uuid("id").defaultRandom().primaryKey(),
     method: text("method").notNull(),
     pathPattern: text("path_pattern").notNull(),
+    targetPath: text("target_path").notNull(),
     serviceKey: text("service_key").notNull(),
     actionKey: text("action_key").notNull(),
     workspaceScoped: boolean("workspace_scoped").notNull().default(true),
