@@ -1,6 +1,7 @@
 export interface RouteSeed {
   method: string;
   pathPattern: string;
+  targetPath?: string;
   serviceKey: string;
   actionKey: string;
   workspaceScoped: boolean;

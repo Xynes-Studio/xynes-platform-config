@@ -106,6 +106,7 @@ bun --env-file=.env.localhost run seed:routes
 
 - `bun run migrate`: Apply pending migrations to the database.
 - `bun run seed:routes`: Upsert route registry from source-of-truth seeds (requires `DATABASE_URL_ADMIN`).
+- `bun run seed`: Alias of `seed:routes` (canonical route seed entrypoint).
 - `bun test`: Run test suite.
 - `bun run lint`: Lint the codebase.
 
@@ -143,7 +144,12 @@ xynes-platform-config/
    - `DATABASE_URL`: `postgres://gateway_runtime:...`
    - `DATABASE_URL_ADMIN`: `postgres://platform_admin:...`
 
-3. Run the seed:
+3. Apply migrations before seeding (required, includes `platform.routes.target_path`):
+   ```bash
+   bun run migrate
+   ```
+
+4. Run the seed:
    ```bash
    bun run seed:routes
    ```
