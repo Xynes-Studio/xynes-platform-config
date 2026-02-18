@@ -19,9 +19,26 @@ const main = async () => {
   console.log(`Routes to seed: ${routeSeeds.length}`);
 
   try {
-    const result = await adminDb.insert(platformRoutes).values(routeSeeds).onConflictDoNothing();
+    await adminDb.transaction(async (tx) => {
+      for (const route of routeSeeds) {
+        const normalizedRoute = {
+          ...route,
+          // Keep target_path aligned with matcher path by default.
+          targetPath: route.pathPattern,
+        };
+
+        await tx.insert(platformRoutes).values(normalizedRoute).onConflictDoUpdate({
+          target: [platformRoutes.method, platformRoutes.pathPattern],
+          set: {
+            ...normalizedRoute,
+            updatedAt: new Date(),
+          },
+        });
+      }
+    });
+
     console.log('Routes seeded successfully');
-    console.log('Note: Existing routes were preserved (onConflictDoNothing)');
+    console.log('Applied as upsert to prevent route drift.');
   } catch (error) {
     console.error('Error seeding routes:', error);
     console.error('');
@@ -35,4 +52,3 @@ const main = async () => {
 };
 
 main();
-

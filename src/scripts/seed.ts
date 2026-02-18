@@ -6,6 +6,7 @@ const seedData = [
   {
     method: 'POST',
     pathPattern: '/workspaces/:workspaceId/documents',
+    targetPath: '/workspaces/:workspaceId/documents',
     serviceKey: 'doc-service',
     actionKey: 'docs.document.create',
     workspaceScoped: true,
@@ -13,6 +14,7 @@ const seedData = [
   {
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/documents/:id',
+    targetPath: '/workspaces/:workspaceId/documents/:id',
     serviceKey: 'doc-service',
     actionKey: 'docs.document.read',
     workspaceScoped: true,
@@ -21,6 +23,7 @@ const seedData = [
   {
     method: 'POST',
     pathPattern: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
+    targetPath: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     serviceKey: 'cms-core',
     actionKey: 'cms.blog_entry.create',
     workspaceScoped: true, // Assuming this, as it has workspaceId in path
@@ -28,6 +31,7 @@ const seedData = [
   {
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
+    targetPath: '/workspaces/:workspaceId/content-types/:contentTypeId/entries',
     serviceKey: 'cms-core',
     actionKey: 'cms.blog_entry.read',
     workspaceScoped: true,
@@ -36,6 +40,7 @@ const seedData = [
   {
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/blog',
+    targetPath: '/workspaces/:workspaceId/blog',
     serviceKey: 'cms-core',
     actionKey: 'cms.blog_entry.listPublished',
     workspaceScoped: true,
@@ -44,6 +49,7 @@ const seedData = [
   {
     method: 'GET',
     pathPattern: '/workspaces/:workspaceId/blog/:slug',
+    targetPath: '/workspaces/:workspaceId/blog/:slug',
     serviceKey: 'cms-core',
     actionKey: 'cms.blog_entry.getPublishedBySlug',
     workspaceScoped: true,

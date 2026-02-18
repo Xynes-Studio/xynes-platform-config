@@ -17,6 +17,7 @@ describe("Platform Schema", () => {
         expect(columnNames).toContain("id");
         expect(columnNames).toContain("method");
         expect(columnNames).toContain("pathPattern");
+        expect(columnNames).toContain("targetPath");
         expect(columnNames).toContain("serviceKey");
         expect(columnNames).toContain("actionKey");
         expect(columnNames).toContain("workspaceScoped");

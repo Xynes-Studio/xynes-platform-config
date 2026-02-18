@@ -34,10 +34,12 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 
 ### Standard Routes
 - **Me**: `/me` (GET) — auth required, not workspace-scoped
+- **Profile**: `/me/profile` (PATCH) — auth required, not workspace-scoped
 - **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
+- **Workspace Members**: `/workspaces/:workspaceId/members` (GET) — auth required, workspace-scoped
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
 - **Generic Content (GATEWAY-CONTENT-ROUTES-1)**: `/workspaces/:workspaceId/content/:routeSegment` (GET) — public, workspace-scoped, template-driven routes
-- **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as non-public by default (explicit public routes should add rate limiting + spam protection)
+- **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as public routes (should always pair with rate limiting + spam protection)
 
 ### Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)
 
@@ -103,7 +105,7 @@ bun --env-file=.env.localhost run seed:routes
 ## Scripts
 
 - `bun run migrate`: Apply pending migrations to the database.
-- `bun run seed:routes`: Seed the database with initial/example routes (requires `DATABASE_URL_ADMIN`).
+- `bun run seed:routes`: Upsert route registry from source-of-truth seeds (requires `DATABASE_URL_ADMIN`).
 - `bun test`: Run test suite.
 - `bun run lint`: Lint the codebase.
 
