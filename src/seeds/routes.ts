@@ -109,6 +109,15 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: true,
     isPublic: true,
   },
+  // CMS Content Types (admin metadata)
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/content-types",
+    serviceKey: "cms-core",
+    actionKey: "cms.content_types.listForWorkspace",
+    workspaceScoped: true,
+    isPublic: false,
+  },
   // Generic Content Routes (ROUTES-CONTENT-1)
   // Template-driven routes: avoid per-template paths like /programs or /events
   {
