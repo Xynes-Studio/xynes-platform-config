@@ -119,6 +119,24 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: true,
     isPublic: false,
   },
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/content-directories",
+    targetPath: "/content-directories",
+    serviceKey: "cms-core",
+    actionKey: "cms.content_directories.listForWorkspace",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
+    method: "POST",
+    pathPattern: "/workspaces/:workspaceId/content-directories",
+    targetPath: "/content-directories",
+    serviceKey: "cms-core",
+    actionKey: "cms.content_directories.create",
+    workspaceScoped: true,
+    isPublic: false,
+  },
   // Generic Content Routes (ROUTES-CONTENT-1)
   // Template-driven routes: avoid per-template paths like /programs or /events
   {

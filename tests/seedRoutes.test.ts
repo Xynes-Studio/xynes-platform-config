@@ -32,6 +32,50 @@ describe("Route Seeds", () => {
     });
   });
 
+  describe("Content Directory Routes", () => {
+    it("should expose GET /workspaces/:workspaceId/content-directories as auth-required and workspace-scoped", () => {
+      const listRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content-directories" &&
+          r.method === "GET",
+      );
+
+      expect(listRoute).toBeDefined();
+      expect(listRoute).toEqual(
+        expect.objectContaining({
+          method: "GET",
+          pathPattern: "/workspaces/:workspaceId/content-directories",
+          targetPath: "/content-directories",
+          serviceKey: "cms-core",
+          actionKey: "cms.content_directories.listForWorkspace",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
+    });
+
+    it("should expose POST /workspaces/:workspaceId/content-directories as auth-required and workspace-scoped", () => {
+      const createRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content-directories" &&
+          r.method === "POST",
+      );
+
+      expect(createRoute).toBeDefined();
+      expect(createRoute).toEqual(
+        expect.objectContaining({
+          method: "POST",
+          pathPattern: "/workspaces/:workspaceId/content-directories",
+          targetPath: "/content-directories",
+          serviceKey: "cms-core",
+          actionKey: "cms.content_directories.create",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
+    });
+  });
+
   // GATEWAY-CONTENT-ROUTES-1: Generic Dynamic Public Content Routes
   describe("Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)", () => {
     it("should expose GET /workspaces/:workspaceId/content/:routeSegment as public, workspace-scoped", () => {
