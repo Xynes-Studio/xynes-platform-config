@@ -137,6 +137,24 @@ export const routeSeeds: RouteSeed[] = [
     workspaceScoped: true,
     isPublic: false,
   },
+  {
+    method: "PATCH",
+    pathPattern: "/workspaces/:workspaceId/content-directories/:directoryId",
+    targetPath: "/content-directories/:directoryId",
+    serviceKey: "cms-core",
+    actionKey: "cms.content_directories.update",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
+    method: "DELETE",
+    pathPattern: "/workspaces/:workspaceId/content-directories/:directoryId",
+    targetPath: "/content-directories/:directoryId",
+    serviceKey: "cms-core",
+    actionKey: "cms.content_directories.delete",
+    workspaceScoped: true,
+    isPublic: false,
+  },
   // Generic Content Routes (ROUTES-CONTENT-1)
   // Template-driven routes: avoid per-template paths like /programs or /events
   {
