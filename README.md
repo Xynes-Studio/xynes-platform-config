@@ -39,6 +39,7 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 - **Workspace Members**: `/workspaces/:workspaceId/members` (GET) — auth required, workspace-scoped
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
 - **Generic Content (GATEWAY-CONTENT-ROUTES-1)**: `/workspaces/:workspaceId/content/:routeSegment` (GET) — public, workspace-scoped, template-driven routes
+- **Content Directories**: `/workspaces/:workspaceId/content-directories` (GET, POST) — auth required, workspace-scoped
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as public routes (should always pair with rate limiting + spam protection)
 
 ### Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)
