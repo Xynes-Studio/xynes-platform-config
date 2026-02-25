@@ -113,6 +113,7 @@ export const routeSeeds: RouteSeed[] = [
   {
     method: "GET",
     pathPattern: "/workspaces/:workspaceId/content-types",
+    targetPath: "/content-types",
     serviceKey: "cms-core",
     actionKey: "cms.content_types.listForWorkspace",
     workspaceScoped: true,

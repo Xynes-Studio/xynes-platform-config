@@ -15,12 +15,20 @@ describe("Route Seeds", () => {
         expect.objectContaining({
           method: "GET",
           pathPattern: "/workspaces/:workspaceId/content-types",
+          targetPath: "/content-types",
           serviceKey: "cms-core",
           actionKey: "cms.content_types.listForWorkspace",
           workspaceScoped: true,
           isPublic: false,
         }),
       );
+
+      const contentTypesRoutes = routeSeeds.filter(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content-types" &&
+          r.method === "GET",
+      );
+      expect(contentTypesRoutes).toHaveLength(1);
     });
   });
 
