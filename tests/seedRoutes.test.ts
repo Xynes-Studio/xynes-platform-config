@@ -2,6 +2,36 @@ import { describe, it, expect } from "bun:test";
 import { routeSeeds } from "../src/seeds/routes";
 
 describe("Route Seeds", () => {
+  describe("Content Type Metadata Routes", () => {
+    it("should expose GET /workspaces/:workspaceId/content-types as auth-required and workspace-scoped", () => {
+      const contentTypesRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content-types" &&
+          r.method === "GET",
+      );
+
+      expect(contentTypesRoute).toBeDefined();
+      expect(contentTypesRoute).toEqual(
+        expect.objectContaining({
+          method: "GET",
+          pathPattern: "/workspaces/:workspaceId/content-types",
+          targetPath: "/content-types",
+          serviceKey: "cms-core",
+          actionKey: "cms.content_types.listForWorkspace",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
+
+      const contentTypesRoutes = routeSeeds.filter(
+        (r) =>
+          r.pathPattern === "/workspaces/:workspaceId/content-types" &&
+          r.method === "GET",
+      );
+      expect(contentTypesRoutes).toHaveLength(1);
+    });
+  });
+
   // GATEWAY-CONTENT-ROUTES-1: Generic Dynamic Public Content Routes
   describe("Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)", () => {
     it("should expose GET /workspaces/:workspaceId/content/:routeSegment as public, workspace-scoped", () => {
