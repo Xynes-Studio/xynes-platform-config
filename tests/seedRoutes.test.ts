@@ -74,6 +74,52 @@ describe("Route Seeds", () => {
         }),
       );
     });
+
+    it("should expose PATCH /workspaces/:workspaceId/content-directories/:directoryId as auth-required and workspace-scoped", () => {
+      const updateRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern ===
+            "/workspaces/:workspaceId/content-directories/:directoryId" &&
+          r.method === "PATCH",
+      );
+
+      expect(updateRoute).toBeDefined();
+      expect(updateRoute).toEqual(
+        expect.objectContaining({
+          method: "PATCH",
+          pathPattern:
+            "/workspaces/:workspaceId/content-directories/:directoryId",
+          targetPath: "/content-directories/:directoryId",
+          serviceKey: "cms-core",
+          actionKey: "cms.content_directories.update",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
+    });
+
+    it("should expose DELETE /workspaces/:workspaceId/content-directories/:directoryId as auth-required and workspace-scoped", () => {
+      const deleteRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern ===
+            "/workspaces/:workspaceId/content-directories/:directoryId" &&
+          r.method === "DELETE",
+      );
+
+      expect(deleteRoute).toBeDefined();
+      expect(deleteRoute).toEqual(
+        expect.objectContaining({
+          method: "DELETE",
+          pathPattern:
+            "/workspaces/:workspaceId/content-directories/:directoryId",
+          targetPath: "/content-directories/:directoryId",
+          serviceKey: "cms-core",
+          actionKey: "cms.content_directories.delete",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
+    });
   });
 
   // GATEWAY-CONTENT-ROUTES-1: Generic Dynamic Public Content Routes
