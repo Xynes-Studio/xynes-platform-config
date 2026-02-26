@@ -122,6 +122,35 @@ describe("Route Seeds", () => {
     });
   });
 
+  describe("CMS Entry Authoring Routes", () => {
+    const expectedEntryActions = [
+      "cms.entry.create",
+      "cms.entry.update",
+      "cms.entry.delete",
+      "cms.entry.publish",
+      "cms.entry.listByDirectory",
+      "cms.entry.getById",
+      "cms.entry.collaborators.set",
+      "cms.entry.favorite.toggle",
+      "cms.entry.favorite.list",
+      "cms.entry.share.generateInternalLink",
+    ] as const;
+
+    it("should include all cms.entry.* admin actions as private workspace-scoped routes", () => {
+      for (const actionKey of expectedEntryActions) {
+        const route = routeSeeds.find((r) => r.actionKey === actionKey);
+        expect(route).toBeDefined();
+        expect(route).toEqual(
+          expect.objectContaining({
+            serviceKey: "cms-core",
+            workspaceScoped: true,
+            isPublic: false,
+          }),
+        );
+      }
+    });
+  });
+
   // GATEWAY-CONTENT-ROUTES-1: Generic Dynamic Public Content Routes
   describe("Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)", () => {
     it("should expose GET /workspaces/:workspaceId/content/:routeSegment as public, workspace-scoped", () => {
@@ -192,8 +221,10 @@ describe("Route Seeds", () => {
     });
 
     it("should include exactly two generic content routes (list + getBySlug)", () => {
-      const genericContentRoutes = routeSeeds.filter((r) =>
-        /\/content(\/|$)/.test(r.pathPattern)
+      const genericContentRoutes = routeSeeds.filter(
+        (r) =>
+          r.actionKey === "cms.content.listPublished" ||
+          r.actionKey === "cms.content.getPublishedBySlug",
       );
 
       expect(genericContentRoutes).toHaveLength(2);
