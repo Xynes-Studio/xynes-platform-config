@@ -38,17 +38,17 @@ SSH tunnel guidance lives in xynes-infra: `xynes-infra/infra/SSH_TUNNEL_SUPABASE
 - **Documents**: `/workspaces/:workspaceId/documents` (POST, GET)
 - **Workspace Members**: `/workspaces/:workspaceId/members` (GET) — auth required, workspace-scoped
 - **Blog**: `/workspaces/:workspaceId/blog` (GET, List/Slug)
-- **Generic Content (GATEWAY-CONTENT-ROUTES-1)**: `/workspaces/:workspaceId/content/:routeSegment` (GET) — public, workspace-scoped, template-driven routes
+- **Generic Content (GATEWAY-CONTENT-ROUTES-1)**: `/workspaces/:workspaceId/content/:routeSegment` (GET) — public compatibility routes (dashboard authoring is directory-first)
 - **Content Directories**: `/workspaces/:workspaceId/content-directories` (GET, POST) — auth required, workspace-scoped
 - **Comments**: `/workspaces/:workspaceId/.../comments` (POST, GET) — seeded as public routes (should always pair with rate limiting + spam protection)
 
 ### Generic Content Routes (GATEWAY-CONTENT-ROUTES-1)
 
-Template-driven routes that allow dynamic content type resolution without requiring gateway code changes:
+Compatibility routes for public content reads without requiring gateway code changes:
 
 | Route | Action Key | Description |
 |-------|------------|-------------|
-| `GET /workspaces/:workspaceId/content/:routeSegment` | `cms.content.listPublished` | List published content by type |
+| `GET /workspaces/:workspaceId/content/:routeSegment` | `cms.content.listPublished` | List published content by public segment |
 | `GET /workspaces/:workspaceId/content/:routeSegment/:slug` | `cms.content.getPublishedBySlug` | Get published content by slug |
 
 **Key properties:**
@@ -58,8 +58,8 @@ Template-driven routes that allow dynamic content type resolution without requir
 
 **How it works:**
 - `:routeSegment` is a dynamic path parameter (e.g., `blog`, `news`, `events`)
-- CMS service resolves `routeSegment` to a `contentTypeId` per workspace
-- Adding new content types requires only CMS setup, no gateway/platform-config changes
+- CMS service resolves `routeSegment` via internal publish routing per workspace
+- Adding new public segments requires only CMS setup, no gateway/platform-config changes
 
 ### Workspace Invites (INVITES-CORE-1)
 
