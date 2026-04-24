@@ -166,6 +166,15 @@ export const routeSeeds: RouteSeed[] = [
     isPublic: false,
   },
   {
+    method: "POST",
+    pathPattern: "/workspaces/:workspaceId/content/entries/:entryId/status",
+    targetPath: "/content/entries/:entryId/status",
+    serviceKey: "cms-core",
+    actionKey: "cms.entry.status.set",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
     method: "GET",
     pathPattern: "/workspaces/:workspaceId/content/entries",
     targetPath: "/content/entries",

@@ -128,6 +128,7 @@ describe("Route Seeds", () => {
       "cms.entry.update",
       "cms.entry.delete",
       "cms.entry.publish",
+      "cms.entry.status.set",
       "cms.entry.listByDirectory",
       "cms.entry.getById",
       "cms.entry.collaborators.set",
@@ -148,6 +149,29 @@ describe("Route Seeds", () => {
           }),
         );
       }
+    });
+
+    it("should expose POST /workspaces/:workspaceId/content/entries/:entryId/status as auth-required and workspace-scoped", () => {
+      const statusRoute = routeSeeds.find(
+        (r) =>
+          r.pathPattern ===
+            "/workspaces/:workspaceId/content/entries/:entryId/status" &&
+          r.method === "POST",
+      );
+
+      expect(statusRoute).toBeDefined();
+      expect(statusRoute).toEqual(
+        expect.objectContaining({
+          method: "POST",
+          pathPattern:
+            "/workspaces/:workspaceId/content/entries/:entryId/status",
+          targetPath: "/content/entries/:entryId/status",
+          serviceKey: "cms-core",
+          actionKey: "cms.entry.status.set",
+          workspaceScoped: true,
+          isPublic: false,
+        }),
+      );
     });
   });
 
