@@ -1,0 +1,12 @@
+# Default reviewers for everything
+*                                  @REPLACE_WITH_PLATFORM_TEAM
+
+# Specific paths (uncomment what applies)
+# /src/db/platformRoutes.ts            @REPLACE_WITH_DB_TEAM
+# /src/db/routeRateLimits.ts           @REPLACE_WITH_DB_TEAM
+# /src/seeds/routes.ts                 @REPLACE_WITH_SECURITY_TEAM
+# /src/scripts/seed.ts                 @REPLACE_WITH_SECURITY_TEAM
+# /scripts/seedRoutes.ts               @REPLACE_WITH_SECURITY_TEAM
+# /scripts/generate-docs.ts            @REPLACE_WITH_PLATFORM_TEAM
+# /drizzle/                            @REPLACE_WITH_DB_TEAM
+# /.github/                            @REPLACE_WITH_PLATFORM_TEAM
