@@ -1,12 +1,12 @@
 # Default reviewers for everything
-*                                  @REPLACE_WITH_PLATFORM_TEAM
+*                                  @archan96
 
 # Specific paths (uncomment what applies)
-# /src/db/platformRoutes.ts            @REPLACE_WITH_DB_TEAM
-# /src/db/routeRateLimits.ts           @REPLACE_WITH_DB_TEAM
-# /src/seeds/routes.ts                 @REPLACE_WITH_SECURITY_TEAM
-# /src/scripts/seed.ts                 @REPLACE_WITH_SECURITY_TEAM
-# /scripts/seedRoutes.ts               @REPLACE_WITH_SECURITY_TEAM
-# /scripts/generate-docs.ts            @REPLACE_WITH_PLATFORM_TEAM
-# /drizzle/                            @REPLACE_WITH_DB_TEAM
-# /.github/                            @REPLACE_WITH_PLATFORM_TEAM
+# /src/db/platformRoutes.ts            @archan96
+# /src/db/routeRateLimits.ts           @archan96
+# /src/seeds/routes.ts                 @archan96
+# /src/scripts/seed.ts                 @archan96
+# /scripts/seedRoutes.ts               @archan96
+# /scripts/generate-docs.ts            @archan96
+# /drizzle/                            @archan96
+# /.github/                            @archan96
