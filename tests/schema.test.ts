@@ -7,7 +7,6 @@ describe("Platform Schema", () => {
     it("should have correct table name and schema", () => {
         const tableName = getTableName(platformRoutes);
         expect(tableName).toBe("routes");
-        // @ts-expect-error - internal property access for schema name check if needed, or rely on Drizzle's behavior
     });
 
     it("should have required columns", () => {

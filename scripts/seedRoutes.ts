@@ -86,7 +86,7 @@ export async function runSeedRoutes(
     for (const route of seeds) {
       const normalizedRoute = normalizeRouteSeed(route);
 
-      await tx.insert(platformRoutes).values(normalizedRoute).onConflictDoUpdate({
+      await tx.insert(platformRoutes).values({ ...normalizedRoute }).onConflictDoUpdate({
         target: [platformRoutes.method, platformRoutes.pathPattern],
         set: {
           ...normalizedRoute,
