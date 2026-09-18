@@ -72,6 +72,7 @@ describeDb('Route Registry (DB)', () => {
     const newRoute = {
       method: 'GET',
       pathPattern: '/unique-test',
+      targetPath: '/unique-test',
       serviceKey: 'test',
       actionKey: 'test.read',
       isPublic: false,
