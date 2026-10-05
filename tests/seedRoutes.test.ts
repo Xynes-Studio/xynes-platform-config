@@ -490,3 +490,19 @@ describe("Route Seeds", () => {
     });
   });
 });
+
+// Frozen A1 metadata. Infra contract checks also compare this to the exported artifact.
+describe("CMS delivery route registration", () => {
+  const operations = [
+    { pathPattern: "/workspaces/:workspaceId/delivery/entries", actionKey: "cms.delivery.listByDirectory" },
+    { pathPattern: "/workspaces/:workspaceId/delivery/entries/:entryId", actionKey: "cms.delivery.getById" },
+  ];
+  it("registers exactly the two private, workspace-scoped GET operations", () => {
+    expect(routeSeeds.filter(route => route.actionKey.startsWith("cms.delivery."))).toEqual(
+      operations.map(operation => ({...operation, method: "GET", serviceKey: "cms-core",
+        targetPath: "/internal/cms-actions", workspaceScoped: true, isPublic: false})),
+    );
+    for (const operation of operations) expect(routeSeeds.filter(route =>
+      route.method === "GET" && route.pathPattern === operation.pathPattern)).toHaveLength(1);
+  });
+});

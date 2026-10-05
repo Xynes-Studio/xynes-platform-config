@@ -154,3 +154,20 @@ xynes-platform-config/
    ```bash
    bun run seed:routes
    ```
+
+## CMS snapshot delivery routes (CMS-INT-A4)
+
+Two private workspace-scoped GET seeds match the frozen A1 artifact:
+`/workspaces/:workspaceId/delivery/entries` → `cms.delivery.listByDirectory`, and
+`/workspaces/:workspaceId/delivery/entries/:entryId` → `cms.delivery.getById`.
+Both target `cms-core` at `/internal/cms-actions`. Existing registries receive
+these rows through infra's forward migration
+`20261005090000_seed_cms_delivery_routes.sql`; older applied migrations are not
+rewritten. Apply only after the CMS implementation/publication migrations and
+A4 gateway/accounts/authz deployments are ready, then restart the gateway to
+load the registry. Do not run a full route seed as a scoped delivery rollback.
+See infra `docs/deployment/cms-delivery-access.md` and the executable parity
+check `scripts/test/cms-content-delivery-routes.test.sh`.
+
+Run `bun run typecheck` for the strict TypeScript gate; it uses the compiler
+already resolved in the repository lockfile and emits no JavaScript.
