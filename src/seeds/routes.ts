@@ -9,6 +9,25 @@ export interface RouteSeed {
 }
 
 export const routeSeeds: RouteSeed[] = [
+  // Snapshot delivery: private, read-only workspace access (CMS-INT-A4).
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/delivery/entries",
+    serviceKey: "cms-core",
+    targetPath: "/internal/cms-actions",
+    actionKey: "cms.delivery.listByDirectory",
+    workspaceScoped: true,
+    isPublic: false,
+  },
+  {
+    method: "GET",
+    pathPattern: "/workspaces/:workspaceId/delivery/entries/:entryId",
+    serviceKey: "cms-core",
+    targetPath: "/internal/cms-actions",
+    actionKey: "cms.delivery.getById",
+    workspaceScoped: true,
+    isPublic: false,
+  },
   // Accounts (ACCOUNTS-ME-1)
   {
     method: "GET",
